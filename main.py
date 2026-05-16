@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-MODEL_NAME = "llama3-70b-8192"
+MODEL_NAME = "llama-3.3-70b-versatile"
 MAX_RECS = 10
 MAX_TURNS = 8
 ALLOWED_TEST_TYPES = {"A", "B", "C", "D", "E", "K", "M", "P", "S"}
