@@ -14,6 +14,8 @@ from pydantic import BaseModel, field_validator
 
 from catalog import load_catalog
 
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
