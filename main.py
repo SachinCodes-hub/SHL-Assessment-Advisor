@@ -2,10 +2,9 @@ import json
 import logging
 import os
 import re
-import time
-from typing import List, Optional
+from typing import List
 
-import google.generativeai as genai
+import anthropic
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
@@ -14,28 +13,26 @@ from pydantic import BaseModel, field_validator
 
 from catalog import load_catalog
 
-
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 log = logging.getLogger(__name__)
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-MODEL_NAME = "gemini-2.5-flash"
+# ── Config ────────────────────────────────────────────────────────────────────
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+MODEL_NAME = "claude-sonnet-4-20250514"
 MAX_RECS = 10
 MAX_TURNS = 8
-MAX_RETRIES = 2
 ALLOWED_TEST_TYPES = {"A", "B", "C", "D", "E", "K", "M", "P", "S"}
 
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    gemini_model = genai.GenerativeModel(MODEL_NAME)
+if ANTHROPIC_API_KEY:
+    claude = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 else:
-    gemini_model = None
-    log.warning("GEMINI_API_KEY not set — /chat will return 500 until configured.")
+    claude = None
+    log.warning("ANTHROPIC_API_KEY not set — /chat will return 500 until configured.")
 
+# ── Catalog ───────────────────────────────────────────────────────────────────
 CATALOG: List[dict] = load_catalog()
 log.info(f"Catalog loaded: {len(CATALOG)} assessments")
 
@@ -49,6 +46,7 @@ if len(_catalog_json) > 90_000:
     _catalog_json = json.dumps(CATALOG[:200], indent=2, ensure_ascii=False)
     log.warning("Catalog trimmed to 200 items to fit context window.")
 
+# ── System prompt ─────────────────────────────────────────────────────────────
 SYSTEM_PROMPT = f"""You are an SHL Assessment Recommender agent. Your ONLY job is to help hiring managers and recruiters find the right SHL individual assessments from the official SHL catalog below.
 
 STRICT RULES — NEVER violate these:
@@ -85,6 +83,7 @@ CATALOG (Individual Test Solutions only — use ONLY these):
 {_catalog_json}
 """
 
+# ── Pydantic schemas ──────────────────────────────────────────────────────────
 class Message(BaseModel):
     role: str
     content: str
@@ -122,9 +121,9 @@ class ChatResponse(BaseModel):
     end_of_conversation: bool
 
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
 def extract_json(text: str) -> dict:
     text = text.strip()
-
     text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
     text = re.sub(r"\s*```\s*$", "", text).strip()
 
@@ -182,80 +181,28 @@ def validate_recommendations(raw_recs: list) -> List[Recommendation]:
     return validated
 
 
-def build_gemini_history(messages: List[Message]) -> tuple[list, str]:
-    history_msgs = messages[:-1]
-    current_msg = messages[-1].content
+def call_claude(messages: List[Message]) -> dict:
+    if claude is None:
+        raise RuntimeError("ANTHROPIC_API_KEY not configured")
 
-    gemini_history = []
-    for i, msg in enumerate(history_msgs):
-        role = "model" if msg.role == "assistant" else "user"
-        content = msg.content
+    anthropic_messages = [
+        {"role": msg.role, "content": msg.content}
+        for msg in messages
+    ]
 
-        if i == 0 and role == "user":
-            content = f"{SYSTEM_PROMPT}\n\n---\nUser: {content}"
+    response = claude.messages.create(
+        model=MODEL_NAME,
+        max_tokens=1500,
+        system=SYSTEM_PROMPT,
+        messages=anthropic_messages,
+        temperature=0.2,
+    )
 
-        gemini_history.append({"role": role, "parts": [content]})
-
-    if not gemini_history:
-        current_msg = f"{SYSTEM_PROMPT}\n\n---\nUser: {current_msg}"
-
-    return gemini_history, current_msg
+    return extract_json(response.content[0].text)
 
 
-import requests
-import json
-
-def call_gemini(messages: List[Message]) -> dict:
-    # 1. Grab the API key securely from your environment variables
-    api_key = os.environ.get("GEMINI_API_KEY", "AIzaSyCHkTx52ULrq8iVjgVEa0KArBFj8a5MxDc")
-    
-    gemini_history, current_msg = build_gemini_history(messages)
-    
-    # 2. Build a clean conversation history payload for Google's API
-    contents = []
-    for turn in gemini_history:
-        role_label = "user" if turn["role"] == "user" else "model"
-        contents.append({
-            "role": role_label,
-            "parts": [{"text": turn["parts"][0]}]
-        })
-    contents.append({
-        "role": "user",
-        "parts": [{"text": current_msg}]
-    })
-
-    # 3. Target the stable, direct endpoint URL
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
-    headers = {"Content-Type": "application/json"}
-    payload = {"contents": contents, "generationConfig": {"temperature": 0.2}}
-
-    for attempt in range(MAX_RETRIES + 1):
-        try:
-            log.info(f"Direct HTTPS POST to Google (Attempt {attempt + 1}/{MAX_RETRIES + 1})...")
-            
-            # Fire the request with a strict 15-second cutoff so it CANNOT freeze
-            response = requests.post(url, headers=headers, json=payload, timeout=15)
-            
-            # Print any clear errors Google sends back immediately
-            if response.status_code != 200:
-                log.error(f"Google API Error Code {response.status_code}: {response.text}")
-                raise RuntimeError(f"Google returned status {response.status_code}")
-                
-            res_json = response.json()
-            raw_text = res_json['candidates'][0]['content']['parts'][0]['text']
-            
-            log.info("Successfully fetched response text from Google API.")
-            return extract_json(raw_text)
-
-        except Exception as e:
-            log.warning(f"Attempt {attempt + 1} failed cleanly: {e}")
-            if attempt < MAX_RETRIES:
-                time.sleep(2)
-
-    raise RuntimeError("Failed to connect to Gemini via raw HTTPS.")
-
+# ── FastAPI app ───────────────────────────────────────────────────────────────
 app = FastAPI(title="SHL Assessment Recommender", version="2.0.0")
-
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if os.path.isdir(STATIC_DIR):
@@ -265,10 +212,11 @@ if os.path.isdir(STATIC_DIR):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["POST", "GET"],
+    allow_headers=["Content-Type"],
 )
+
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     log.error(f"Unhandled exception on {request.url}: {exc}", exc_info=True)
@@ -277,6 +225,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal server error — please retry"},
     )
 
+
 @app.get("/")
 def root():
     index = os.path.join(os.path.dirname(__file__), "static", "index.html")
@@ -284,20 +233,16 @@ def root():
         return FileResponse(index)
     return {"message": "SHL Assessment Recommender API", "docs": "/docs", "health": "/health"}
 
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
-from fastapi import Response
-
-@app.options("/chat")
-def options_chat():
-    return Response(status_code=200)
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
-    if not GEMINI_API_KEY:
-        raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
+    if not ANTHROPIC_API_KEY:
+        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY not configured")
 
     if len(request.messages) > MAX_TURNS:
         log.info(f"Turn cap hit: {len(request.messages)} messages")
@@ -316,9 +261,9 @@ def chat(request: ChatRequest):
     )
 
     try:
-        result = call_gemini(request.messages)
+        result = call_claude(request.messages)
     except Exception as e:
-        log.error(f"call_gemini failed: {e}", exc_info=True)
+        log.error(f"call_claude failed: {e}", exc_info=True)
         return ChatResponse(
             reply="I'm having trouble right now. Could you rephrase your request?",
             recommendations=[],
