@@ -9,7 +9,8 @@ from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from google import genai
+import google.generativeai as genai
+
 from google.api_core.exceptions import ResourceExhausted
 from pydantic import BaseModel, field_validator
 
