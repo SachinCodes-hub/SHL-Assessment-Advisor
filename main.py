@@ -15,7 +15,7 @@ from pydantic import BaseModel, field_validator
 from catalog import load_catalog
 
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -255,6 +255,7 @@ def call_gemini(messages: List[Message]) -> dict:
     raise RuntimeError("Failed to connect to Gemini via raw HTTPS.")
 
 app = FastAPI(title="SHL Assessment Recommender", version="2.0.0")
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if os.path.isdir(STATIC_DIR):
