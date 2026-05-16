@@ -255,7 +255,7 @@ def call_gemini(messages: List[Message]) -> dict:
     raise RuntimeError("Failed to connect to Gemini via raw HTTPS.")
 
 app = FastAPI(title="SHL Assessment Recommender", version="2.0.0")
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if os.path.isdir(STATIC_DIR):
@@ -265,10 +265,10 @@ if os.path.isdir(STATIC_DIR):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["*"],  # Allows all methods (GET, POST, OPTIONS)
-    allow_headers=["*"],  # Allows all headers
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     log.error(f"Unhandled exception on {request.url}: {exc}", exc_info=True)
