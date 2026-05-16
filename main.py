@@ -288,6 +288,12 @@ def root():
 def health():
     return {"status": "ok"}
 
+from fastapi import Response
+
+@app.options("/chat")
+def options_chat():
+    return Response(status_code=200)
+
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
     if not GEMINI_API_KEY:
