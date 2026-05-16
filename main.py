@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-2.5-flash-lite"
 MAX_RECS = 10
 MAX_TURNS = 8
 ALLOWED_TEST_TYPES = {"A", "B", "C", "D", "E", "K", "M", "P", "S"}
