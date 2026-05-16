@@ -1,0 +1,1030 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+
+  .shl-root {
+    min-height: 100vh;
+    background: #f5f4f2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shl-topbar {
+    background: #1a1a2e;
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .shl-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .shl-logo-mark {
+    width: 32px;
+    height: 32px;
+    background: #e8233a;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+
+  .shl-logo-text {
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  .shl-logo-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255,255,255,0.25);
+    margin: 0 10px;
+  }
+
+  .shl-logo-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  .shl-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .shl-topbar-link {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .shl-topbar-btn {
+    font-size: 12px;
+    background: #e8233a;
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+
+  .shl-nav {
+    background: #fff;
+    border-bottom: 1px solid #e8e6e2;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .shl-nav-item {
+    font-size: 13px;
+    color: #666;
+    padding: 0 16px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  .shl-nav-item.active {
+    color: #e8233a;
+    border-bottom-color: #e8233a;
+    font-weight: 500;
+  }
+
+  .shl-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    padding: 2.5rem 2rem 2rem;
+    flex-shrink: 0;
+  }
+
+  .shl-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .shl-hero h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .shl-hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    max-width: 480px;
+  }
+
+  .shl-hero-badge {
+    background: rgba(232,35,58,0.2);
+    border: 1px solid rgba(232,35,58,0.4);
+    color: #ff6b7a;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .shl-hero-stats {
+    display: flex;
+    gap: 2rem;
+    flex-shrink: 0;
+  }
+
+  .shl-stat {
+    text-align: center;
+  }
+
+  .shl-stat-num {
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .shl-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  .shl-main {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .shl-chat-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 0.5px solid #e0deda;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shl-chat-header {
+    padding: 12px 16px;
+    border-bottom: 0.5px solid #e0deda;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fafaf8;
+  }
+
+  .shl-chat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .shl-ai-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+  }
+
+  .shl-chat-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a2e;
+  }
+
+  .shl-chat-subtitle {
+    font-size: 11px;
+    color: #999;
+  }
+
+  .shl-chat-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .shl-icon-btn {
+    background: none;
+    border: 0.5px solid #e0deda;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #888;
+    font-size: 14px;
+  }
+
+  .shl-messages {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .shl-msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .shl-msg.user {
+    flex-direction: row-reverse;
+  }
+
+  .shl-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .shl-avatar.ai {
+    background: #1a1a2e;
+    color: #fff;
+  }
+
+  .shl-avatar.user {
+    background: #e8233a;
+    color: #fff;
+  }
+
+  .shl-bubble {
+    max-width: 72%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+
+  .shl-bubble.ai {
+    background: #f5f4f2;
+    color: #1a1a2e;
+    border: 0.5px solid #e0deda;
+    border-top-left-radius: 2px;
+  }
+
+  .shl-bubble.user {
+    background: #1a1a2e;
+    color: #fff;
+    border-top-right-radius: 2px;
+  }
+
+  .shl-msg-time {
+    font-size: 10px;
+    color: #bbb;
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  .shl-msg.user .shl-msg-time { text-align: left; }
+
+  .shl-recs-inline {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .shl-rec-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 0.5px solid #e0deda;
+    border-radius: 6px;
+    padding: 7px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .shl-rec-chip:hover {
+    border-color: #e8233a;
+  }
+
+  .shl-type-badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .type-A { background: #e6f1fb; color: #0c447c; }
+  .type-K { background: #eaf3de; color: #27500a; }
+  .type-P { background: #eeedfe; color: #3c3489; }
+  .type-M { background: #faeeda; color: #633806; }
+  .type-S { background: #fbeaf0; color: #72243e; }
+  .type-B { background: #faece7; color: #712b13; }
+
+  .shl-rec-name {
+    font-size: 12px;
+    color: #1a1a2e;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .shl-rec-arrow {
+    font-size: 12px;
+    color: #e8233a;
+  }
+
+  .shl-typing {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 8px 0 2px;
+  }
+
+  .shl-typing span {
+    width: 6px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 50%;
+    animation: shlbounce 1.2s infinite;
+  }
+
+  .shl-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .shl-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes shlbounce {
+    0%, 60%, 100% { transform: translateY(0); background: #ccc; }
+    30% { transform: translateY(-4px); background: #e8233a; }
+  }
+
+  .shl-input-row {
+    padding: 12px 16px;
+    border-top: 0.5px solid #e0deda;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    background: #fafaf8;
+  }
+
+  .shl-input {
+    flex: 1;
+    border: 0.5px solid #d0cec9;
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    font-family: var(--font-sans);
+    background: #fff;
+    color: #1a1a2e;
+    resize: none;
+    min-height: 38px;
+    max-height: 100px;
+    outline: none;
+    line-height: 1.4;
+  }
+
+  .shl-input:focus {
+    border-color: #1a1a2e;
+  }
+
+  .shl-send-btn {
+    background: #e8233a;
+    border: none;
+    border-radius: 6px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .shl-send-btn:hover { background: #c91d32; }
+  .shl-send-btn:disabled { background: #ddd; cursor: not-allowed; }
+
+  .shl-quick-chips {
+    padding: 10px 16px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .shl-quick-chip {
+    font-size: 11.5px;
+    background: #fff;
+    border: 0.5px solid #d0cec9;
+    border-radius: 20px;
+    padding: 4px 12px;
+    cursor: pointer;
+    color: #444;
+    white-space: nowrap;
+  }
+
+  .shl-quick-chip:hover {
+    border-color: #e8233a;
+    color: #e8233a;
+  }
+
+  .shl-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .shl-info-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 0.5px solid #e0deda;
+    padding: 14px 16px;
+  }
+
+  .shl-info-card h3 {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
+  }
+
+  .shl-capability {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 0.5px solid #f0ede8;
+    font-size: 12.5px;
+    color: #333;
+    line-height: 1.4;
+  }
+
+  .shl-capability:last-child { border-bottom: none; }
+
+  .shl-cap-icon {
+    color: #e8233a;
+    font-size: 15px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .shl-session-info {
+    font-size: 12px;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 0.5px solid #f0ede8;
+  }
+
+  .shl-session-info:last-child { border-bottom: none; }
+  .shl-session-val { color: #1a1a2e; font-weight: 500; }
+
+  .shl-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 1rem;
+  }
+
+  .shl-disclaimer {
+    font-size: 11px;
+    color: #aaa;
+    text-align: center;
+    padding: 0 1rem 1rem;
+  }
+
+  .shl-footer {
+    background: #1a1a2e;
+    padding: 1.25rem 2rem;
+    margin-top: auto;
+  }
+
+  .shl-footer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .shl-footer-copy {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .shl-footer-links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .shl-footer-link {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .results-panel {
+    margin-top: 1rem;
+  }
+
+  .results-header {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .results-count {
+    background: #e8233a;
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .result-card {
+    background: #fff;
+    border: 0.5px solid #e0deda;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .result-card:hover { border-color: #e8233a; }
+
+  .result-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: #f5f4f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #1a1a2e;
+    flex-shrink: 0;
+  }
+
+  .result-info { flex: 1; }
+
+  .result-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a2e;
+    margin-bottom: 3px;
+  }
+
+  .result-meta {
+    font-size: 11px;
+    color: #999;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .result-dot { width: 3px; height: 3px; background: #ccc; border-radius: 50%; }
+
+  .result-link {
+    font-size: 11px;
+    color: #e8233a;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+</style>
+
+<div class="shl-root">
+
+  <div class="shl-topbar">
+    <div class="shl-logo">
+      <div class="shl-logo-mark">SHL</div>
+      <span class="shl-logo-text">SHL</span>
+      <div class="shl-logo-divider"></div>
+      <span class="shl-logo-sub">Assessment Intelligence</span>
+    </div>
+    <div class="shl-topbar-right">
+      <span class="shl-topbar-link">Products</span>
+      <span class="shl-topbar-link">Solutions</span>
+      <span class="shl-topbar-link">Resources</span>
+      <button class="shl-topbar-btn">Contact sales</button>
+    </div>
+  </div>
+
+  <div class="shl-nav">
+    <div class="shl-nav-item">Product catalog</div>
+    <div class="shl-nav-item active">Assessment finder</div>
+    <div class="shl-nav-item">My shortlist</div>
+    <div class="shl-nav-item">Reports</div>
+    <div class="shl-nav-item">Admin</div>
+  </div>
+
+  <div class="shl-hero">
+    <div class="shl-hero-inner">
+      <div>
+        <div class="shl-hero-badge">AI-powered</div>
+        <h1>Find the right assessment, faster</h1>
+        <p>Describe the role you're hiring for and our AI advisor will match you with the most relevant SHL Individual Test Solutions from our full catalog.</p>
+      </div>
+      <div class="shl-hero-stats">
+        <div class="shl-stat">
+          <div class="shl-stat-num">300+</div>
+          <div class="shl-stat-label">Assessments</div>
+        </div>
+        <div class="shl-stat">
+          <div class="shl-stat-num">40+</div>
+          <div class="shl-stat-label">Languages</div>
+        </div>
+        <div class="shl-stat">
+          <div class="shl-stat-num">10k+</div>
+          <div class="shl-stat-label">Clients</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shl-main">
+    <div class="shl-layout">
+      <div>
+        <div class="shl-chat-card">
+          <div class="shl-chat-header">
+            <div class="shl-chat-header-left">
+              <div class="shl-ai-dot"></div>
+              <div>
+                <div class="shl-chat-title">SHL Assessment Advisor</div>
+                <div class="shl-chat-subtitle">AI-powered · Catalog v2024.1</div>
+              </div>
+            </div>
+            <div class="shl-chat-actions">
+              <button class="shl-icon-btn" title="New session" onclick="resetChat()"><i class="ti ti-refresh" aria-hidden="true"></i></button>
+              <button class="shl-icon-btn" title="Download shortlist"><i class="ti ti-download" aria-hidden="true"></i></button>
+            </div>
+          </div>
+
+          <div class="shl-quick-chips" id="quickChips">
+            <span class="shl-quick-chip" onclick="sendQuick('Hiring a mid-level software engineer')">Software engineer</span>
+            <span class="shl-quick-chip" onclick="sendQuick('Graduate sales role, UK')">Graduate sales</span>
+            <span class="shl-quick-chip" onclick="sendQuick('Data analyst with SQL skills')">Data analyst</span>
+            <span class="shl-quick-chip" onclick="sendQuick('Entry-level customer service agent')">Customer service</span>
+            <span class="shl-quick-chip" onclick="sendQuick('Senior finance manager')">Finance manager</span>
+          </div>
+
+          <div class="shl-messages" id="messages">
+            <div class="shl-msg">
+              <div class="shl-avatar ai">SHL</div>
+              <div>
+                <div class="shl-bubble ai">
+                  Hello! I'm the SHL Assessment Advisor. Tell me about the role you're hiring for — the job title, seniority level, and what skills or traits matter most — and I'll recommend the best assessments from our catalog.
+                </div>
+                <div class="shl-msg-time">Just now</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="shl-input-row">
+            <textarea class="shl-input" id="msgInput" rows="1" placeholder="Describe the role you're hiring for…" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+            <button class="shl-send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+              <i class="ti ti-send" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="resultsPanel" style="display:none;" class="results-panel">
+          <div class="results-header">
+            <span>Recommended assessments</span>
+            <span class="results-count" id="resultsCount">0</span>
+          </div>
+          <div id="resultsList"></div>
+        </div>
+      </div>
+
+      <div class="shl-sidebar">
+        <div class="shl-info-card">
+          <h3>What I can help with</h3>
+          <div class="shl-capability">
+            <i class="ti ti-search shl-cap-icon" aria-hidden="true"></i>
+            <span>Match assessments to any role or seniority level</span>
+          </div>
+          <div class="shl-capability">
+            <i class="ti ti-adjustments shl-cap-icon" aria-hidden="true"></i>
+            <span>Refine by test type, language, or remote testing</span>
+          </div>
+          <div class="shl-capability">
+            <i class="ti ti-scale shl-cap-icon" aria-hidden="true"></i>
+            <span>Compare assessments side by side</span>
+          </div>
+          <div class="shl-capability">
+            <i class="ti ti-shield-check shl-cap-icon" aria-hidden="true"></i>
+            <span>Only recommends verified SHL catalog items</span>
+          </div>
+        </div>
+
+        <div class="shl-info-card">
+          <h3>Session info</h3>
+          <div class="shl-session-info">
+            <span>Turns used</span>
+            <span class="shl-session-val" id="turnCount">0 / 8</span>
+          </div>
+          <div class="shl-session-info">
+            <span>Assessments found</span>
+            <span class="shl-session-val" id="recsFoundCount">—</span>
+          </div>
+          <div class="shl-session-info">
+            <span>Catalog</span>
+            <span class="shl-session-val">v2024.1</span>
+          </div>
+          <div class="shl-session-info">
+            <span>Type</span>
+            <span class="shl-session-val">Individual</span>
+          </div>
+        </div>
+
+        <div class="shl-info-card">
+          <h3>Test types</h3>
+          <div style="display:flex; flex-wrap:wrap; gap:5px;">
+            <span class="shl-type-badge type-A" style="padding:3px 8px;border-radius:4px;font-size:11px;">A · Ability</span>
+            <span class="shl-type-badge type-K" style="padding:3px 8px;border-radius:4px;font-size:11px;">K · Knowledge</span>
+            <span class="shl-type-badge type-P" style="padding:3px 8px;border-radius:4px;font-size:11px;">P · Personality</span>
+            <span class="shl-type-badge type-M" style="padding:3px 8px;border-radius:4px;font-size:11px;">M · Motivation</span>
+            <span class="shl-type-badge type-S" style="padding:3px 8px;border-radius:4px;font-size:11px;">S · Situational</span>
+            <span class="shl-type-badge type-B" style="padding:3px 8px;border-radius:4px;font-size:11px;">B · Biodata</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shl-disclaimer">
+      SHL Assessment Advisor uses AI to suggest assessments from the SHL Individual Test Solutions catalog only.
+      All recommendations are validated against the live catalog. &nbsp;·&nbsp; <span style="color:#e8233a;cursor:pointer;">Privacy policy</span>
+    </div>
+  </div>
+
+  <div class="shl-footer">
+    <div class="shl-footer-inner">
+      <div class="shl-footer-copy">© 2024 SHL Group Ltd. All rights reserved.</div>
+      <div class="shl-footer-links">
+        <span class="shl-footer-link">Privacy</span>
+        <span class="shl-footer-link">Terms</span>
+        <span class="shl-footer-link">Accessibility</span>
+        <span class="shl-footer-link">Support</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE_URL = "http://localhost:8001";
+let history = [];
+let turns = 0;
+let allRecs = [];
+
+const typeIcons = {
+  A: "ti-brain", K: "ti-code", P: "ti-user-circle",
+  M: "ti-heart", S: "ti-clipboard-list", B: "ti-file-text",
+  C: "ti-star", D: "ti-chart-line", E: "ti-activity"
+};
+
+const typeLabels = {
+  A: "Ability & Aptitude", K: "Knowledge & Skills", P: "Personality",
+  M: "Motivation", S: "Situational Judgement", B: "Biodata",
+  C: "Competencies", D: "Development", E: "Exercise"
+};
+
+function autoResize(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 100) + "px";
+}
+
+function handleKey(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function getTime() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function addMessage(role, text, recs) {
+  const msgs = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "shl-msg " + role;
+
+  const initials = role === "user" ? "You" : "SHL";
+  let recsHtml = "";
+  if (recs && recs.length > 0) {
+    recsHtml = '<div class="shl-recs-inline">';
+    recs.forEach(r => {
+      const badge = `<span class="shl-type-badge type-${r.test_type || 'A'}">${r.test_type || 'A'}</span>`;
+      recsHtml += `<a class="shl-rec-chip" href="${r.url}" target="_blank">
+        ${badge}
+        <span class="shl-rec-name">${r.name}</span>
+        <i class="ti ti-external-link shl-rec-arrow" aria-hidden="true"></i>
+      </a>`;
+    });
+    recsHtml += "</div>";
+  }
+
+  div.innerHTML = `
+    <div class="shl-avatar ${role}">${role === "user" ? "You" : "SHL"}</div>
+    <div>
+      <div class="shl-bubble ${role}">${text}${recsHtml}</div>
+      <div class="shl-msg-time">${getTime()}</div>
+    </div>`;
+
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById("messages");
+  const div = document.createElement("div");
+  div.className = "shl-msg";
+  div.id = "typing-indicator";
+  div.innerHTML = `
+    <div class="shl-avatar ai">SHL</div>
+    <div>
+      <div class="shl-bubble ai" style="padding:12px 14px;">
+        <div class="shl-typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById("typing-indicator");
+  if (el) el.remove();
+}
+
+function updateResultsPanel(recs) {
+  if (!recs || recs.length === 0) return;
+  allRecs = [...allRecs, ...recs].filter((r, i, arr) =>
+    arr.findIndex(x => x.url === r.url) === i
+  );
+
+  const panel = document.getElementById("resultsPanel");
+  const list = document.getElementById("resultsList");
+  const count = document.getElementById("resultsCount");
+  panel.style.display = "block";
+  count.textContent = allRecs.length;
+  document.getElementById("recsFoundCount").textContent = allRecs.length;
+
+  list.innerHTML = "";
+  allRecs.forEach(r => {
+    const icon = typeIcons[r.test_type] || "ti-file";
+    const label = typeLabels[r.test_type] || "Assessment";
+    const div = document.createElement("a");
+    div.className = "result-card";
+    div.href = r.url;
+    div.target = "_blank";
+    div.innerHTML = `
+      <div class="result-icon"><i class="ti ${icon}" aria-hidden="true"></i></div>
+      <div class="result-info">
+        <div class="result-name">${r.name}</div>
+        <div class="result-meta">
+          <span class="shl-type-badge type-${r.test_type || 'A'}" style="padding:2px 6px;border-radius:3px;font-size:10px;">${r.test_type}</span>
+          <div class="result-dot"></div>
+          <span>${label}</span>
+        </div>
+      </div>
+      <span class="result-link"><i class="ti ti-external-link" aria-hidden="true"></i> View</span>`;
+    list.appendChild(div);
+  });
+}
+
+async function sendMessage() {
+  const input = document.getElementById("msgInput");
+  const text = input.value.trim();
+  if (!text || turns >= 8) return;
+
+  document.getElementById("quickChips").style.display = "none";
+  input.value = "";
+  input.style.height = "auto";
+  document.getElementById("sendBtn").disabled = true;
+
+  history.push({ role: "user", content: text });
+  addMessage("user", text);
+  turns++;
+  document.getElementById("turnCount").textContent = `${turns} / 8`;
+
+  showTyping();
+
+  try {
+    const resp = await fetch(`${BASE_URL}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history })
+    });
+
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+
+    hideTyping();
+
+    history.push({ role: "assistant", content: data.reply });
+    addMessage("assistant", data.reply, data.recommendations);
+
+    if (data.recommendations && data.recommendations.length > 0) {
+      updateResultsPanel(data.recommendations);
+    }
+
+    if (data.end_of_conversation || turns >= 8) {
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("msgInput").placeholder = "Session complete. Refresh to start over.";
+    }
+
+  } catch (err) {
+    hideTyping();
+    addMessage("assistant", "I'm unable to reach the server right now. Make sure your local server is running at <code>localhost:8000</code> and try again.");
+  }
+
+  document.getElementById("sendBtn").disabled = false;
+  document.getElementById("msgInput").focus();
+}
+
+function sendQuick(text) {
+  document.getElementById("msgInput").value = text;
+  sendMessage();
+}
+
+function resetChat() {
+  history = [];
+  turns = 0;
+  allRecs = [];
+  document.getElementById("messages").innerHTML = `
+    <div class="shl-msg">
+      <div class="shl-avatar ai">SHL</div>
+      <div>
+        <div class="shl-bubble ai">Hello! I'm the SHL Assessment Advisor. Tell me about the role you're hiring for — the job title, seniority level, and what skills or traits matter most — and I'll recommend the best assessments from our catalog.</div>
+        <div class="shl-msg-time">Just now</div>
+      </div>
+    </div>`;
+  document.getElementById("resultsPanel").style.display = "none";
+  document.getElementById("resultsList").innerHTML = "";
+  document.getElementById("resultsCount").textContent = "0";
+  document.getElementById("recsFoundCount").textContent = "—";
+  document.getElementById("turnCount").textContent = "0 / 8";
+  document.getElementById("quickChips").style.display = "flex";
+  document.getElementById("sendBtn").disabled = false;
+  document.getElementById("msgInput").placeholder = "Describe the role you're hiring for…";
+}
+</script>
