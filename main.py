@@ -424,15 +424,14 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def root():
     index = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index):
         return FileResponse(index)
     return {"message": "SHL Assessment Recommender API v4.0"}
 
-
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok"}
 
