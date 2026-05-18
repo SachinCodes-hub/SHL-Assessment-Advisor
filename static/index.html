@@ -1,655 +1,455 @@
-
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans); }
-
-  .shl-root {
-    min-height: 100vh;
-    background: #f5f4f2;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .shl-topbar {
-    background: #1a1a2e;
-    padding: 0 2rem;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-
-  .shl-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .shl-logo-mark {
-    width: 32px;
-    height: 32px;
-    background: #e8233a;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    font-weight: 500;
-    color: #fff;
-    letter-spacing: -0.5px;
-    flex-shrink: 0;
-  }
-
-  .shl-logo-text {
-    font-size: 17px;
-    font-weight: 500;
-    color: #fff;
-    letter-spacing: 0.5px;
-  }
-
-  .shl-logo-divider {
-    width: 1px;
-    height: 18px;
-    background: rgba(255,255,255,0.25);
-    margin: 0 10px;
-  }
-
-  .shl-logo-sub {
-    font-size: 12px;
-    color: rgba(255,255,255,0.55);
-    font-weight: 400;
-    letter-spacing: 0.3px;
-  }
-
-  .shl-topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .shl-topbar-link {
-    font-size: 13px;
-    color: rgba(255,255,255,0.65);
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .shl-topbar-btn {
-    font-size: 12px;
-    background: #e8233a;
-    color: #fff;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-  }
-
-  .shl-nav {
-    background: #fff;
-    border-bottom: 1px solid #e8e6e2;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    height: 44px;
-    flex-shrink: 0;
-  }
-
-  .shl-nav-item {
-    font-size: 13px;
-    color: #666;
-    padding: 0 16px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-  }
-
-  .shl-nav-item.active {
-    color: #e8233a;
-    border-bottom-color: #e8233a;
-    font-weight: 500;
-  }
-
-  .shl-hero {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
-    padding: 2.5rem 2rem 2rem;
-    flex-shrink: 0;
-  }
-
-  .shl-hero-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .shl-hero h1 {
-    font-size: 22px;
-    font-weight: 500;
-    color: #fff;
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .shl-hero p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.6;
-    max-width: 480px;
-  }
-
-  .shl-hero-badge {
-    background: rgba(232,35,58,0.2);
-    border: 1px solid rgba(232,35,58,0.4);
-    color: #ff6b7a;
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 12px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  .shl-hero-stats {
-    display: flex;
-    gap: 2rem;
-    flex-shrink: 0;
-  }
-
-  .shl-stat {
-    text-align: center;
-  }
-
-  .shl-stat-num {
-    font-size: 22px;
-    font-weight: 500;
-    color: #fff;
-  }
-
-  .shl-stat-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.5);
-    margin-top: 2px;
-  }
-
-  .shl-main {
-    flex: 1;
-    max-width: 900px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .shl-chat-card {
-    background: #fff;
-    border-radius: 8px;
-    border: 0.5px solid #e0deda;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .shl-chat-header {
-    padding: 12px 16px;
-    border-bottom: 0.5px solid #e0deda;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fafaf8;
-  }
-
-  .shl-chat-header-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .shl-ai-dot {
-    width: 8px;
-    height: 8px;
-    background: #22c55e;
-    border-radius: 50%;
-  }
-
-  .shl-chat-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: #1a1a2e;
-  }
-
-  .shl-chat-subtitle {
-    font-size: 11px;
-    color: #999;
-  }
-
-  .shl-chat-actions {
-    display: flex;
-    gap: 8px;
-  }
-
-  .shl-icon-btn {
-    background: none;
-    border: 0.5px solid #e0deda;
-    border-radius: 4px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #888;
-    font-size: 14px;
-  }
-
-  .shl-messages {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-height: 320px;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
-  .shl-msg {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-
-  .shl-msg.user {
-    flex-direction: row-reverse;
-  }
-
-  .shl-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  .shl-avatar.ai {
-    background: #1a1a2e;
-    color: #fff;
-  }
-
-  .shl-avatar.user {
-    background: #e8233a;
-    color: #fff;
-  }
-
-  .shl-bubble {
-    max-width: 72%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    line-height: 1.55;
-  }
-
-  .shl-bubble.ai {
-    background: #f5f4f2;
-    color: #1a1a2e;
-    border: 0.5px solid #e0deda;
-    border-top-left-radius: 2px;
-  }
-
-  .shl-bubble.user {
-    background: #1a1a2e;
-    color: #fff;
-    border-top-right-radius: 2px;
-  }
-
-  .shl-msg-time {
-    font-size: 10px;
-    color: #bbb;
-    margin-top: 4px;
-    text-align: right;
-  }
-
-  .shl-msg.user .shl-msg-time { text-align: left; }
-
-  .shl-recs-inline {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .shl-rec-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #fff;
-    border: 0.5px solid #e0deda;
-    border-radius: 6px;
-    padding: 7px 10px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: border-color 0.15s;
-  }
-
-  .shl-rec-chip:hover {
-    border-color: #e8233a;
-  }
-
-  .shl-type-badge {
-    font-size: 10px;
-    font-weight: 500;
-    padding: 2px 6px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-
-  .type-A { background: #e6f1fb; color: #0c447c; }
-  .type-K { background: #eaf3de; color: #27500a; }
-  .type-P { background: #eeedfe; color: #3c3489; }
-  .type-M { background: #faeeda; color: #633806; }
-  .type-S { background: #fbeaf0; color: #72243e; }
-  .type-B { background: #faece7; color: #712b13; }
-
-  .shl-rec-name {
-    font-size: 12px;
-    color: #1a1a2e;
-    font-weight: 500;
-    flex: 1;
-  }
-
-  .shl-rec-arrow {
-    font-size: 12px;
-    color: #e8233a;
-  }
-
-  .shl-typing {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    padding: 8px 0 2px;
-  }
-
-  .shl-typing span {
-    width: 6px;
-    height: 6px;
-    background: #ccc;
-    border-radius: 50%;
-    animation: shlbounce 1.2s infinite;
-  }
-
-  .shl-typing span:nth-child(2) { animation-delay: 0.2s; }
-  .shl-typing span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes shlbounce {
-    0%, 60%, 100% { transform: translateY(0); background: #ccc; }
-    30% { transform: translateY(-4px); background: #e8233a; }
-  }
-
-  .shl-input-row {
-    padding: 12px 16px;
-    border-top: 0.5px solid #e0deda;
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-    background: #fafaf8;
-  }
-
-  .shl-input {
-    flex: 1;
-    border: 0.5px solid #d0cec9;
-    border-radius: 6px;
-    padding: 9px 12px;
-    font-size: 13.5px;
-    font-family: var(--font-sans);
-    background: #fff;
-    color: #1a1a2e;
-    resize: none;
-    min-height: 38px;
-    max-height: 100px;
-    outline: none;
-    line-height: 1.4;
-  }
-
-  .shl-input:focus {
-    border-color: #1a1a2e;
-  }
-
-  .shl-send-btn {
-    background: #e8233a;
-    border: none;
-    border-radius: 6px;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    color: #fff;
-    font-size: 16px;
-  }
-
-  .shl-send-btn:hover { background: #c91d32; }
-  .shl-send-btn:disabled { background: #ddd; cursor: not-allowed; }
-
-  .shl-quick-chips {
-    padding: 10px 16px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .shl-quick-chip {
-    font-size: 11.5px;
-    background: #fff;
-    border: 0.5px solid #d0cec9;
-    border-radius: 20px;
-    padding: 4px 12px;
-    cursor: pointer;
-    color: #444;
-    white-space: nowrap;
-  }
-
-  .shl-quick-chip:hover {
-    border-color: #e8233a;
-    color: #e8233a;
-  }
-
-  .shl-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .shl-info-card {
-    background: #fff;
-    border-radius: 8px;
-    border: 0.5px solid #e0deda;
-    padding: 14px 16px;
-  }
-
-  .shl-info-card h3 {
-    font-size: 12px;
-    font-weight: 500;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 12px;
-  }
-
-  .shl-capability {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 0.5px solid #f0ede8;
-    font-size: 12.5px;
-    color: #333;
-    line-height: 1.4;
-  }
-
-  .shl-capability:last-child { border-bottom: none; }
-
-  .shl-cap-icon {
-    color: #e8233a;
-    font-size: 15px;
-    margin-top: 1px;
-    flex-shrink: 0;
-  }
-
-  .shl-session-info {
-    font-size: 12px;
-    color: #888;
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    border-bottom: 0.5px solid #f0ede8;
-  }
-
-  .shl-session-info:last-child { border-bottom: none; }
-  .shl-session-val { color: #1a1a2e; font-weight: 500; }
-
-  .shl-layout {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-    gap: 1rem;
-  }
-
-  .shl-disclaimer {
-    font-size: 11px;
-    color: #aaa;
-    text-align: center;
-    padding: 0 1rem 1rem;
-  }
-
-  .shl-footer {
-    background: #1a1a2e;
-    padding: 1.25rem 2rem;
-    margin-top: auto;
-  }
-
-  .shl-footer-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .shl-footer-copy {
-    font-size: 11px;
-    color: rgba(255,255,255,0.35);
-  }
-
-  .shl-footer-links {
-    display: flex;
-    gap: 16px;
-  }
-
-  .shl-footer-link {
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .results-panel {
-    margin-top: 1rem;
-  }
-
-  .results-header {
-    font-size: 12px;
-    font-weight: 500;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .results-count {
-    background: #e8233a;
-    color: #fff;
-    font-size: 10px;
-    padding: 1px 7px;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-
-  .result-card {
-    background: #fff;
-    border: 0.5px solid #e0deda;
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .result-card:hover { border-color: #e8233a; }
-
-  .result-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
-    background: #f5f4f2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: #1a1a2e;
-    flex-shrink: 0;
-  }
-
-  .result-info { flex: 1; }
-
-  .result-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: #1a1a2e;
-    margin-bottom: 3px;
-  }
-
-  .result-meta {
-    font-size: 11px;
-    color: #999;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .result-dot { width: 3px; height: 3px; background: #ccc; border-radius: 50%; }
-
-  .result-link {
-    font-size: 11px;
-    color: #e8233a;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    flex-shrink: 0;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Primary SEO ── -->
+  <title>SHL Assessment Advisor | LLM-Powered Assessment Recommender</title>
+  <meta name="description" content="Find the right SHL assessment for any role. AI-powered conversational advisor that recommends Individual Test Solutions based on job title, seniority, and competencies." />
+
+  <!-- ── Open Graph — LinkedIn, Facebook, WhatsApp ── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://shl-assessment-advisor-1.onrender.com/" />
+  <meta property="og:title"       content="SHL Assessment Advisor | AI-Powered Recommender" />
+  <meta property="og:description" content="AI-powered conversational tool that recommends the right SHL assessments for any hiring need. Describe a role and get a matched shortlist instantly." />
+  <meta property="og:image"       content="https://shl-assessment-advisor-1.onrender.com/static/og-image.png" />
+  <meta property="og:site_name"   content="SHL Assessment Advisor" />
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="SHL Assessment Advisor" />
+  <meta name="twitter:description" content="AI-powered SHL assessment recommender. Describe your role and get a matched shortlist instantly." />
+
+  <!-- ── Favicon (inline SVG — no file needed) ── -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e8233a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='13' fill='white'>SHL</text></svg>" />
+
+  <!-- ── Tabler Icons ── -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/webfont/tabler-icons.min.css" />
+
+  <!-- ── Google Fonts ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root { --font-sans: 'Inter', system-ui, -apple-system, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); }
+
+    .shl-root {
+      min-height: 100vh;
+      background: #f5f4f2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shl-topbar {
+      background: #1a1a2e;
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .shl-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .shl-logo-mark {
+      width: 32px;
+      height: 32px;
+      background: #e8233a;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .shl-logo-text {
+      font-size: 17px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .shl-logo-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 10px;
+    }
+
+    .shl-logo-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    .shl-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .shl-topbar-link {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .shl-topbar-btn {
+      font-size: 12px;
+      background: #e8233a;
+      color: #fff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .shl-nav {
+      background: #fff;
+      border-bottom: 1px solid #e8e6e2;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 44px;
+      flex-shrink: 0;
+    }
+
+    .shl-nav-item {
+      font-size: 13px;
+      color: #666;
+      padding: 0 16px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .shl-nav-item.active {
+      color: #e8233a;
+      border-bottom-color: #e8233a;
+      font-weight: 500;
+    }
+
+    .shl-hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      padding: 2.5rem 2rem 2rem;
+      flex-shrink: 0;
+    }
+
+    .shl-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .shl-hero h1 {
+      font-size: 22px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .shl-hero p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .shl-hero-badge {
+      background: rgba(232,35,58,0.2);
+      border: 1px solid rgba(232,35,58,0.4);
+      color: #ff6b7a;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .shl-hero-stats { display: flex; gap: 2rem; flex-shrink: 0; }
+    .shl-stat { text-align: center; }
+    .shl-stat-num { font-size: 22px; font-weight: 500; color: #fff; }
+    .shl-stat-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .shl-main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .shl-chat-card {
+      background: #fff;
+      border-radius: 8px;
+      border: 0.5px solid #e0deda;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shl-chat-header {
+      padding: 12px 16px;
+      border-bottom: 0.5px solid #e0deda;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafaf8;
+    }
+
+    .shl-chat-header-left { display: flex; align-items: center; gap: 8px; }
+    .shl-ai-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; }
+    .shl-chat-title { font-size: 13px; font-weight: 500; color: #1a1a2e; }
+    .shl-chat-subtitle { font-size: 11px; color: #999; }
+    .shl-chat-actions { display: flex; gap: 8px; }
+
+    .shl-icon-btn {
+      background: none;
+      border: 0.5px solid #e0deda;
+      border-radius: 4px;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #888; font-size: 14px;
+    }
+
+    .shl-messages {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .shl-msg { display: flex; gap: 10px; align-items: flex-start; }
+    .shl-msg.user { flex-direction: row-reverse; }
+
+    .shl-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 500; flex-shrink: 0;
+    }
+    .shl-avatar.ai   { background: #1a1a2e; color: #fff; }
+    .shl-avatar.user { background: #e8233a; color: #fff; }
+
+    .shl-bubble {
+      max-width: 72%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .shl-bubble.ai {
+      background: #f5f4f2; color: #1a1a2e;
+      border: 0.5px solid #e0deda;
+      border-top-left-radius: 2px;
+    }
+    .shl-bubble.user { background: #1a1a2e; color: #fff; border-top-right-radius: 2px; }
+
+    .shl-msg-time { font-size: 10px; color: #bbb; margin-top: 4px; text-align: right; }
+    .shl-msg.user .shl-msg-time { text-align: left; }
+
+    .shl-recs-inline { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+
+    .shl-rec-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #fff; border: 0.5px solid #e0deda;
+      border-radius: 6px; padding: 7px 10px;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .shl-rec-chip:hover { border-color: #e8233a; }
+
+    .shl-type-badge {
+      font-size: 10px; font-weight: 500;
+      padding: 2px 6px; border-radius: 3px; flex-shrink: 0;
+    }
+    .type-A { background: #e6f1fb; color: #0c447c; }
+    .type-K { background: #eaf3de; color: #27500a; }
+    .type-P { background: #eeedfe; color: #3c3489; }
+    .type-M { background: #faeeda; color: #633806; }
+    .type-S { background: #fbeaf0; color: #72243e; }
+    .type-B { background: #faece7; color: #712b13; }
+
+    .shl-rec-name { font-size: 12px; color: #1a1a2e; font-weight: 500; flex: 1; }
+    .shl-rec-arrow { font-size: 12px; color: #e8233a; }
+
+    .shl-typing { display: flex; gap: 4px; align-items: center; padding: 8px 0 2px; }
+    .shl-typing span {
+      width: 6px; height: 6px;
+      background: #ccc; border-radius: 50%;
+      animation: shlbounce 1.2s infinite;
+    }
+    .shl-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .shl-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes shlbounce {
+      0%, 60%, 100% { transform: translateY(0); background: #ccc; }
+      30% { transform: translateY(-4px); background: #e8233a; }
+    }
+
+    .shl-input-row {
+      padding: 12px 16px;
+      border-top: 0.5px solid #e0deda;
+      display: flex; gap: 8px; align-items: flex-end;
+      background: #fafaf8;
+    }
+
+    .shl-input {
+      flex: 1;
+      border: 0.5px solid #d0cec9; border-radius: 6px;
+      padding: 9px 12px; font-size: 13.5px;
+      font-family: var(--font-sans);
+      background: #fff; color: #1a1a2e;
+      resize: none; min-height: 38px; max-height: 100px;
+      outline: none; line-height: 1.4;
+    }
+    .shl-input:focus { border-color: #1a1a2e; }
+
+    .shl-send-btn {
+      background: #e8233a; border: none; border-radius: 6px;
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; color: #fff; font-size: 16px;
+    }
+    .shl-send-btn:hover    { background: #c91d32; }
+    .shl-send-btn:disabled { background: #ddd; cursor: not-allowed; }
+
+    .shl-quick-chips {
+      padding: 10px 16px 0;
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .shl-quick-chip {
+      font-size: 11.5px; background: #fff;
+      border: 0.5px solid #d0cec9; border-radius: 20px;
+      padding: 4px 12px; cursor: pointer; color: #444; white-space: nowrap;
+    }
+    .shl-quick-chip:hover { border-color: #e8233a; color: #e8233a; }
+
+    .shl-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+    .shl-info-card {
+      background: #fff; border-radius: 8px;
+      border: 0.5px solid #e0deda; padding: 14px 16px;
+    }
+    .shl-info-card h3 {
+      font-size: 12px; font-weight: 500; color: #888;
+      text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px;
+    }
+
+    .shl-capability {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 6px 0; border-bottom: 0.5px solid #f0ede8;
+      font-size: 12.5px; color: #333; line-height: 1.4;
+    }
+    .shl-capability:last-child { border-bottom: none; }
+    .shl-cap-icon { color: #e8233a; font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+
+    .shl-session-info {
+      font-size: 12px; color: #888;
+      display: flex; justify-content: space-between;
+      padding: 4px 0; border-bottom: 0.5px solid #f0ede8;
+    }
+    .shl-session-info:last-child { border-bottom: none; }
+    .shl-session-val { color: #1a1a2e; font-weight: 500; }
+
+    .shl-layout {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 1rem;
+    }
+
+    .shl-disclaimer {
+      font-size: 11px; color: #aaa;
+      text-align: center; padding: 0 1rem 1rem;
+    }
+
+    .shl-footer {
+      background: #1a1a2e;
+      padding: 1.25rem 2rem; margin-top: auto;
+    }
+    .shl-footer-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .shl-footer-copy { font-size: 11px; color: rgba(255,255,255,0.35); }
+    .shl-footer-links { display: flex; gap: 16px; }
+    .shl-footer-link {
+      font-size: 11px; color: rgba(255,255,255,0.4);
+      text-decoration: none; cursor: pointer;
+    }
+
+    .results-panel { margin-top: 1rem; }
+    .results-header {
+      font-size: 12px; font-weight: 500; color: #888;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      margin-bottom: 8px; display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    .results-count {
+      background: #e8233a; color: #fff;
+      font-size: 10px; padding: 1px 7px;
+      border-radius: 10px; font-weight: 500;
+    }
+
+    .result-card {
+      background: #fff; border: 0.5px solid #e0deda;
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; text-decoration: none;
+    }
+    .result-card:hover { border-color: #e8233a; }
+
+    .result-icon {
+      width: 36px; height: 36px; border-radius: 6px;
+      background: #f5f4f2;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #1a1a2e; flex-shrink: 0;
+    }
+    .result-info { flex: 1; }
+    .result-name { font-size: 13px; font-weight: 500; color: #1a1a2e; margin-bottom: 3px; }
+    .result-meta { font-size: 11px; color: #999; display: flex; gap: 8px; align-items: center; }
+    .result-dot { width: 3px; height: 3px; background: #ccc; border-radius: 50%; }
+    .result-link {
+      font-size: 11px; color: #e8233a; text-decoration: none;
+      display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
 
 <div class="shl-root">
 
@@ -713,8 +513,12 @@
               </div>
             </div>
             <div class="shl-chat-actions">
-              <button class="shl-icon-btn" title="New session" onclick="resetChat()"><i class="ti ti-refresh" aria-hidden="true"></i></button>
-              <button class="shl-icon-btn" title="Download shortlist"><i class="ti ti-download" aria-hidden="true"></i></button>
+              <button class="shl-icon-btn" title="New session" onclick="resetChat()">
+                <i class="ti ti-refresh" aria-hidden="true"></i>
+              </button>
+              <button class="shl-icon-btn" title="Download shortlist">
+                <i class="ti ti-download" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
 
@@ -739,7 +543,14 @@
           </div>
 
           <div class="shl-input-row">
-            <textarea class="shl-input" id="msgInput" rows="1" placeholder="Describe the role you're hiring for…" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+            <textarea
+              class="shl-input"
+              id="msgInput"
+              rows="1"
+              placeholder="Describe the role you're hiring for…"
+              onkeydown="handleKey(event)"
+              oninput="autoResize(this)"
+            ></textarea>
             <button class="shl-send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
               <i class="ti ti-send" aria-hidden="true"></i>
             </button>
@@ -812,7 +623,8 @@
 
     <div class="shl-disclaimer">
       SHL Assessment Advisor uses AI to suggest assessments from the SHL Individual Test Solutions catalog only.
-      All recommendations are validated against the live catalog. &nbsp;·&nbsp; <span style="color:#e8233a;cursor:pointer;">Privacy policy</span>
+      All recommendations are validated against the live catalog. &nbsp;·&nbsp;
+      <span style="color:#e8233a;cursor:pointer;">Privacy policy</span>
     </div>
   </div>
 
@@ -868,13 +680,12 @@ function addMessage(role, text, recs) {
   const div = document.createElement("div");
   div.className = "shl-msg " + role;
 
-  const initials = role === "user" ? "You" : "SHL";
   let recsHtml = "";
   if (recs && recs.length > 0) {
     recsHtml = '<div class="shl-recs-inline">';
     recs.forEach(r => {
       const badge = `<span class="shl-type-badge type-${r.test_type || 'A'}">${r.test_type || 'A'}</span>`;
-      recsHtml += `<a class="shl-rec-chip" href="${r.url}" target="_blank">
+      recsHtml += `<a class="shl-rec-chip" href="${r.url}" target="_blank" rel="noopener">
         ${badge}
         <span class="shl-rec-name">${r.name}</span>
         <i class="ti ti-external-link shl-rec-arrow" aria-hidden="true"></i>
@@ -922,7 +733,7 @@ function updateResultsPanel(recs) {
   );
 
   const panel = document.getElementById("resultsPanel");
-  const list = document.getElementById("resultsList");
+  const list  = document.getElementById("resultsList");
   const count = document.getElementById("resultsCount");
   panel.style.display = "block";
   count.textContent = allRecs.length;
@@ -930,13 +741,14 @@ function updateResultsPanel(recs) {
 
   list.innerHTML = "";
   allRecs.forEach(r => {
-    const icon = typeIcons[r.test_type] || "ti-file";
+    const icon  = typeIcons[r.test_type]  || "ti-file";
     const label = typeLabels[r.test_type] || "Assessment";
-    const div = document.createElement("a");
-    div.className = "result-card";
-    div.href = r.url;
-    div.target = "_blank";
-    div.innerHTML = `
+    const a = document.createElement("a");
+    a.className = "result-card";
+    a.href = r.url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.innerHTML = `
       <div class="result-icon"><i class="ti ${icon}" aria-hidden="true"></i></div>
       <div class="result-info">
         <div class="result-name">${r.name}</div>
@@ -947,13 +759,13 @@ function updateResultsPanel(recs) {
         </div>
       </div>
       <span class="result-link"><i class="ti ti-external-link" aria-hidden="true"></i> View</span>`;
-    list.appendChild(div);
+    list.appendChild(a);
   });
 }
 
 async function sendMessage() {
   const input = document.getElementById("msgInput");
-  const text = input.value.trim();
+  const text  = input.value.trim();
   if (!text || turns >= 8) return;
 
   document.getElementById("quickChips").style.display = "none";
@@ -979,7 +791,6 @@ async function sendMessage() {
     const data = await resp.json();
 
     hideTyping();
-
     history.push({ role: "assistant", content: data.reply });
     addMessage("assistant", data.reply, data.recommendations);
 
@@ -994,7 +805,7 @@ async function sendMessage() {
 
   } catch (err) {
     hideTyping();
-    addMessage("assistant", "I'm unable to reach the server right now. Make sure your local server is running at <code>localhost:8000</code> and try again.");
+    addMessage("assistant", "I'm unable to reach the server right now. Please try again in a moment.");
   }
 
   document.getElementById("sendBtn").disabled = false;
@@ -1007,9 +818,7 @@ function sendQuick(text) {
 }
 
 function resetChat() {
-  history = [];
-  turns = 0;
-  allRecs = [];
+  history = []; turns = 0; allRecs = [];
   document.getElementById("messages").innerHTML = `
     <div class="shl-msg">
       <div class="shl-avatar ai">SHL</div>
@@ -1028,3 +837,6 @@ function resetChat() {
   document.getElementById("msgInput").placeholder = "Describe the role you're hiring for…";
 }
 </script>
+
+</body>
+</html>
