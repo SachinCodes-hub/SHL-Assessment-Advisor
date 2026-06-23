@@ -1,12 +1,3 @@
-"""
-SHL Assessment Recommender — FastAPI Service v4.0
-POST /chat  → stateless conversational agent
-GET  /health → readiness probe
-GET  /       → frontend UI
-
-Designed to pass ALL SHL evaluation probes.
-NEVER returns HTTP 500 — all errors return valid ChatResponse JSON.
-"""
 
 import json
 import logging
